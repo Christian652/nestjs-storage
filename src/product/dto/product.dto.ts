@@ -4,16 +4,10 @@ export class ProductDTO {
 
     id: number;
 
-    @IsString()
-    @IsNotEmpty()
-    name: string;
+    title: string;
 
-    @IsNotEmpty()
-    @IsString()
     description: string;
 
-    @IsNotEmpty()
-    @IsNumber()
     unitPrice: number;
 
 }

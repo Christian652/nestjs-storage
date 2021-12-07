@@ -37,49 +37,7 @@ export class ProductController {
     @Body() productDTO: ProductDTO,
   ): Promise<Product> {
     try {
-      const product = await this.productService.save(productDTO);
-      return product;
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @Put()
-  @Roles(Role.Admin)
-  @UsePipes(ValidationPipe)
-  public async update(
-    @Body() productDTO: ProductDTO,
-  ): Promise<Product> {
-    try {
-      const product = await this.productService.save(productDTO);
-      return product;
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @Get()
-  public async getAll(@Query() parameters: GetProductFilterDTO): Promise<Product[]> {
-    try {
-      const product = await this.productService.getAll(parameters);
-      return product;
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  @Get(':id')
-  public async getOne(@Param('id', ParseIntPipe) id: number): Promise<Product> {
-      const product = await this.productService.getOne(id);
-      return product;
-  }
-
-  @Delete(':id')
-  @Roles(Role.Admin)
-  public async delete(@Param('id', ParseIntPipe) id: number) {
-    try {
-      const deletedProduct = await this.productService.delete(id);
-      return deletedProduct
+      return await this.productService.save(productDTO);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
