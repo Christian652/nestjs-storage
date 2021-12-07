@@ -24,7 +24,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
-import { IsUserLoggedEqualsGuard } from './guards/isUserLoggedEquals.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateUserDTO } from './dto/update-user.dto';
 
@@ -45,7 +44,7 @@ export class UserController {
       if (profile_pic?.path) {
         userDto.profile_path = profile_pic.path.split('/')[2];
       }
-      userDto.id = parseInt(userDto.id);
+
       const user = await this.userService.save(userDto);
 
       return user;
@@ -61,8 +60,8 @@ export class UserController {
   }
 
   @Patch()
-  @Roles(Role.Admin, Role.User)
-  @UseGuards(AuthGuard(), RolesGuard, IsUserLoggedEqualsGuard)
+  @Roles(Role.Admin, Role.Master)
+  @UseGuards(AuthGuard(), RolesGuard)
   @UsePipes(ValidationPipe)
   @UseInterceptors(FileInterceptor("profile_pic", { dest: './uploads/profiles' }))
   public async update(
@@ -73,7 +72,6 @@ export class UserController {
       if (profile_pic && profile_pic.path) {
         userDto.profile_path = profile_pic.path.split('/')[2];
       }
-      userDto.id = parseInt(userDto.id);
       const user = await this.userService.update(userDto);
 
       return user;

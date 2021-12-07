@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { ROLES_KEY } from './decorators/roles.decorator';
+import { Role } from './enums/role.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -29,7 +30,7 @@ export class RolesGuard implements CanActivate {
             if (decodedJwt) {
                 const user = await this.userService.findById({ id: decodedJwt['id'] });
 
-                if (user.role === "User")
+                if (user.role === Role.Stocker)
                     if (user.id !== decodedJwt['id'])
                         return false;
     

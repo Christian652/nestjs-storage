@@ -36,9 +36,9 @@ export class UserSeeder implements Seeder {
         },
         {
           id: null,
-          name: 'common user',
-          email: 'usuario@gmail.com',
-          role: Role.User,
+          name: 'master user',
+          email: 'master@gmail.com',
+          role: Role.Master,
           profile_path: 'aaaa',
           password: commonpassword,
         },

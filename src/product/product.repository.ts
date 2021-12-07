@@ -5,11 +5,11 @@ import { ProductDTO } from './dto/product.dto';
 @EntityRepository(Product)
 export class ProductRepository extends Repository<Product> {
 
-  public async save(
+  public async saveProduct(
     productDto: ProductDTO,
   ): Promise<any> {
     const { id, title, unitPrice, description } = productDto;
-
+    
     // 
   }
 
