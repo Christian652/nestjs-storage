@@ -9,7 +9,9 @@ export class RolesService {
   public async getAll(): Promise<Role[]> {
     const roles = [
       Role.Admin,
-      Role.User
+      Role.Master,
+      Role.Stocker,
+      Role.StockerAdmin,
     ];
 
     return roles;
