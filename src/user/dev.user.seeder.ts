@@ -28,7 +28,7 @@ export class DevUserSeeder implements Seeder {
           const user_ = {
             id: null,
             name: `usuario ${index}`,
-            role: Role.User,
+            role: Role.Stocker,
             email: `usuario${index}@gmail.com`,
             password: `usuario${index}`,
             profile_path: `aaaaa`,

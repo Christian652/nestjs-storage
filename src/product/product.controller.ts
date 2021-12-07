@@ -21,7 +21,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/auth/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator'
 import { RolesGuard } from 'src/auth/roles.guard';
-import { GetProductFilterDTO } from './dto/getProducts.filter.dto';
 
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('products')
@@ -35,7 +34,7 @@ export class ProductController {
   @UsePipes(ValidationPipe)
   public async create(
     @Body() productDTO: ProductDTO,
-  ): Promise<Product> {
+  ): Promise<any> {
     try {
       return await this.productService.save(productDTO);
     } catch (error) {
