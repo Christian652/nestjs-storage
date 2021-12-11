@@ -1,10 +1,10 @@
 import { Exclude } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { Role } from 'src/auth/enums/role.enum';
 
 export class UserDTO {
   @IsOptional()
-  id: number;
+  id?: any;
   
   @IsString({
     message: 'nome deve ser de tipo textual!'
@@ -19,13 +19,14 @@ export class UserDTO {
   @IsString({
     message: 'papel deve ser de tipo textual!'
   })
+  @IsEnum(Role)
   role: Role;
 
   @IsString({
     message: 'perfil deve ser de tipo textual!'
   })
   @IsOptional()
-  profile_path: string;
+  profile_path?: string;
 
   @IsString({
     message: 'senha deve ser de tipo textual!'

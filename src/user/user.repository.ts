@@ -13,17 +13,15 @@ export class UserRepository extends Repository<User> {
     userDto: UserDTO,
   ) {
     const { id, name, email, password, role, profile_path } = userDto;
-
+    
     const user = new User();
-    user.id = id ? id : null;
+    user.id = +id > 0 ? +id : null;
     user.name = name;
     user.email = email;
     user.role = role;
 
-    if (profile_path) {
-      user.profile_path = profile_path;
-    }
-
+    if (profile_path) user.profile_path = profile_path;
+    
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);

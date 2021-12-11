@@ -1,8 +1,9 @@
 
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn} from 'typeorm';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, OneToMany, ManyToMany, UpdateDateColumn} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { Role } from 'src/auth/enums/role.enum';
+import { Product } from 'src/product/product.entity';
 
 
 @Entity({name: "users"})
@@ -28,12 +29,34 @@ export class User extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true})
   password_reset_expires: Date;
 
+  @Column({ nullable: true})
+  confirmation_token: string;
+
+  @Column({ type: 'boolean', nullable: false, default: false })
+  confirmated: boolean;
+
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @OneToMany(
+    () => Product,
+    product => product.author
+  )
+  productsICreated: Product[];
+
+  @ManyToMany(
+    () => Product,
+    product => product.stockers,
+    { cascade: true, onDelete:"SET NULL", nullable: true}
+  )
+  productsIStock: Product[];
+
   @CreateDateColumn()
   created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
   
   async validatePassword(password: string) {
     return await bcrypt.compare(password,  this.password);

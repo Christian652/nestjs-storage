@@ -1,3 +1,4 @@
+import { AuthService } from './../auth/auth.service';
 import {
   Controller,
   Post,
@@ -29,12 +30,15 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) { }
 
   @Post()
   @UsePipes(ValidationPipe)
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard(), RolesGuard)
+  // @Roles(Role.Admin)
+  // @UseGuards(AuthGuard(), RolesGuard)
   @UseInterceptors(FileInterceptor("profile_pic", { dest: './uploads/profiles' }))
   public async create(
     @UploadedFile() profile_pic,
@@ -46,6 +50,7 @@ export class UserController {
       }
 
       const user = await this.userService.save(userDto);
+      await this.authService.sendConfirmationMail(user);
 
       return user;
     } catch (error) {
@@ -98,6 +103,15 @@ export class UserController {
     try {
       const user = await this.userService.getOne(id);
       return user;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('confirmate/:token')
+  public async confirmateEmail(@Param('token') token): Promise<void> {
+    try {
+      await this.userService.confirmate(token);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

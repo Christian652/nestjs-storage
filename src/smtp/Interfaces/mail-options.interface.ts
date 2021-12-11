@@ -4,5 +4,7 @@ export default interface MailOptions{
   subject: string,
   text?: string,
   html?: string,
-  attachments?: any
+  attachments?: any,
+  template?: string,
+  context?: any
 }

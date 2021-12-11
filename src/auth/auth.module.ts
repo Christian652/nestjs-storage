@@ -7,13 +7,15 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import { SmtpModule } from 'src/smtp/smtp.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository]),
-  PassportModule.register({
-    defaultStrategy: 'jwt',
-    property: 'user',
-    session: false
+  imports: [
+    TypeOrmModule.forFeature([UserRepository]),
+    PassportModule.register({
+      defaultStrategy: 'jwt',
+      property: 'user',
+      session: false
     }),
     JwtModule.register({
       secret: process.env.SECRET,
@@ -21,10 +23,11 @@ import { JwtStrategy } from './jwt.strategy';
         expiresIn: process.env.EXPIRESIN,
       },
     }),
-    PassportModule
+    PassportModule,
+    SmtpModule
   ],
   controllers: [AuthController],
-  providers: [UserService, AuthService,JwtStrategy],
-  exports: [PassportModule, JwtModule],
+  providers: [UserService, AuthService, JwtStrategy],
+  exports: [PassportModule, JwtModule, AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

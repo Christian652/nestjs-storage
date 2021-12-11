@@ -20,10 +20,10 @@ export class UserSeeder implements Seeder {
       const adminpassword = await bcrypt.hash(rawadminpassword, adminsalt);
     
 
-      const rawcommonpassword = 'usuario';
+      const rawmasterpassword = 'master';
 
-      const commonsalt = await bcrypt.genSalt(10);
-      const commonpassword = await bcrypt.hash(rawcommonpassword, commonsalt);
+      const mastersalt = await bcrypt.genSalt(10);
+      const masterpassword = await bcrypt.hash(rawmasterpassword, mastersalt);
     
       return await this.userRepository.insertMany([
         {
@@ -40,7 +40,7 @@ export class UserSeeder implements Seeder {
           email: 'master@gmail.com',
           role: Role.Master,
           profile_path: 'aaaa',
-          password: commonpassword,
+          password: masterpassword,
         },
       ]);  
     } catch (error) {
