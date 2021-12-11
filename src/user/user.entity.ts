@@ -8,8 +8,8 @@ import { Product } from 'src/product/product.entity';
 
 @Entity({name: "users"})
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -44,6 +44,12 @@ export class User extends BaseEntity {
     product => product.author
   )
   productsICreated: Product[];
+
+  @OneToMany(
+    () => Storage,
+    storage => storage.stocker
+  )
+  storages: Storage[];
 
   @ManyToMany(
     () => Product,

@@ -1,11 +1,12 @@
+import { Storage } from 'src/storages/storages.entity';
 import { User } from 'src/user/user.entity';
-import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { PrimaryGeneratedColumn, BaseEntity, Column, Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 
 @Entity({ name: "products" })
 export class Product extends BaseEntity {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ length: 100 })
   title: string;
@@ -31,6 +32,12 @@ export class Product extends BaseEntity {
     { cascade: true, onDelete: "SET NULL", nullable: true}
   )
   author: User;
+
+  @OneToMany(
+    () => Storage,
+    storage => storage.product
+  )
+  storages: Storage[];
 
   @ManyToMany(() => User)
   @JoinTable()

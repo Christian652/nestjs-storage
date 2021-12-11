@@ -63,7 +63,7 @@ export class UserService {
       .getOne();
 
     if (!user) throw new HttpException(`Nenhum usuário corresponde a essas credenciais!`, HttpStatus.UNAUTHORIZED)
-    if (!user.confirmated) throw new HttpException(`Verifique seu email e confirme sua conta!`, HttpStatus.UNAUTHORIZED)
+    // if (!user.confirmated) throw new HttpException(`Verifique seu email e confirme sua conta!`, HttpStatus.UNAUTHORIZED)
 
     const login = await user.validatePassword(password);
 

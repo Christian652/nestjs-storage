@@ -59,9 +59,10 @@ export class AuthService {
 
   public async sendConfirmationMail(user: User) {
     const token = this.crypto.randomBytes(15).toString("hex");
-    user.confirmation_token = token;
-    const url = `${process.env.APP_URL}/users/confirmate/${token}`;
+    user.confirmation_token = token;;
     await user.save();
+
+    const url = `${process.env.APP_URL}/users/confirmate/${token}`
     await this.smtpService.sendRawEmail({
       to: [user.email],
       from: 'products@gmail.com',

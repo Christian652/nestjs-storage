@@ -15,61 +15,61 @@ import {
   Query,
   Req
 } from '@nestjs/common';
-import { ProductService } from './product.service';
-import { ProductDTO } from './dto/product.dto';
-import { Product } from './product.entity';
+import { StorageService } from './storages.service';
+import { StorageDTO } from './dto/storages.dto';
+import { Storage } from './storages.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/auth/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator'
 import { RolesGuard } from 'src/auth/roles.guard';
 
 @UseGuards(AuthGuard(), RolesGuard)
-@Controller('products')
-export class ProductController {
+@Controller('storages')
+export class StorageController {
   constructor(
-    private productService: ProductService
+    private storagesService: StorageService
   ) { }
 
   @Post()
-  @Roles(Role.Admin, Role.StockerAdmin)
+  @Roles(Role.Admin, Role.Master)
   @UsePipes(ValidationPipe)
   public async create(
-    @Body() productDTO: ProductDTO,
+    @Body() dto: StorageDTO,
   ): Promise<any> {
     try {
-      return await this.productService.save(productDTO);
+      return await this.storagesService.save(dto);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get()
-  @Roles(Role.Admin, Role.StockerAdmin, Role.Master, Role.Stocker)
-  public async getAll(@Req() req): Promise<Product[]> {
+  @Roles(Role.Admin, Role.Master)
+  public async getAll(): Promise<Storage[]> {
     try {
-      return await this.productService.getProducts(req.user);
+      return await this.storagesService.getAll();
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get(":id")
-  @Roles(Role.Admin, Role.StockerAdmin, Role.Stocker, Role.Master)
+  @Roles(Role.Admin, Role.Master)
   public async getOne(@Param("id") id: number): Promise<any> {
     try {
-      return await this.productService.getOne(id);
+      return await this.storagesService.getOne(id);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Delete()
-  @Roles(Role.Admin, Role.StockerAdmin)
+  @Roles(Role.Master)
   public async delete(
     @Param("id", ParseIntPipe) id: number
   ): Promise<any> {
     try {
-      return await this.productService.delete(id);
+      return await this.storagesService.delete(id);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

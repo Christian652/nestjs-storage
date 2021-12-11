@@ -15,7 +15,7 @@ export class UserRepository extends Repository<User> {
     const { id, name, email, password, role, profile_path } = userDto;
     
     const user = new User();
-    user.id = +id > 0 ? +id : null;
+    user.id = id !== "null" ? id : null;
     user.name = name;
     user.email = email;
     user.role = role;
@@ -67,12 +67,7 @@ export class UserRepository extends Repository<User> {
   public async getByMonth(month: number) {
     const data = await this.find();
 
-    const result = [];
-    data.forEach(item => {
-      if ((item.created_at.getMonth()) == month) result.push(item); 
-    });
-
-    return result;
+    return data.filter(item => item.created_at.getMonth() == month)
   }
 
   public async findAll() {

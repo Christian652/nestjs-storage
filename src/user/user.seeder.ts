@@ -32,6 +32,7 @@ export class UserSeeder implements Seeder {
           email: 'admin@gmail.com',
           role: Role.Admin,
           profile_path: 'aaaa',
+          confirmated: true,
           password: adminpassword,
         },
         {
@@ -40,6 +41,7 @@ export class UserSeeder implements Seeder {
           email: 'master@gmail.com',
           role: Role.Master,
           profile_path: 'aaaa',
+          confirmated: true,
           password: masterpassword,
         },
       ]);  

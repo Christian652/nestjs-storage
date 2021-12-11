@@ -37,8 +37,8 @@ export class UserController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  // @Roles(Role.Admin)
-  // @UseGuards(AuthGuard(), RolesGuard)
+  @Roles(Role.Master)
+  @UseGuards(AuthGuard(), RolesGuard)
   @UseInterceptors(FileInterceptor("profile_pic", { dest: './uploads/profiles' }))
   public async create(
     @UploadedFile() profile_pic,
@@ -54,7 +54,6 @@ export class UserController {
 
       return user;
     } catch (error) {
-      console.log(error)
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -86,7 +85,8 @@ export class UserController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(AuthGuard())
+  @Roles(Role.Admin, Role.Master)
+  @UseGuards(AuthGuard(), RolesGuard)
   @Get()
   public async getAll(): Promise<User[]> {
     try {
@@ -98,7 +98,8 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard())
+  @Roles(Role.Master, Role.Admin)
+  @UseGuards(AuthGuard(), RolesGuard)
   public async getOne(@Param('id', ParseIntPipe) id): Promise<User> {
     try {
       const user = await this.userService.getOne(id);
@@ -118,11 +119,12 @@ export class UserController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard(), RolesGuard)
+  @Roles(Role.Admin, Role.Master)
+  @UseGuards(AuthGuard(), RolesGuard) 
   public async delete(@Param('id', ParseIntPipe) id: number) {
     try {
       const deletedUser = await this.userService.delete(id);
+      // To do:  apagar a imagem/arquivo de perfil dele
       return deletedUser;
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);

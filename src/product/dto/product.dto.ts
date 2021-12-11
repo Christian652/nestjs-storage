@@ -4,7 +4,7 @@ import { User } from 'src/user/user.entity';
 
 export class ProductDTO {
     @IsOptional()
-    id?: number;
+    id?: string;
 
     @IsNotEmpty({ message: `infome o titulo!` })
     @IsString({ message: `o titulo deve ser de tipo textual!` })
@@ -36,5 +36,9 @@ export class ProductDTO {
     @IsNotEmpty({ message: `informe os usuários gerenciadores desse produto!` })
     @Type(() => User)
     @IsArray({ each: true })
-    stockers: User[]
+    stockers: User[];
+
+    @IsOptional()
+    @Type(() => User)
+    author?: User;
 }

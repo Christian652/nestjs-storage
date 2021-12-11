@@ -5,7 +5,7 @@ export class UpdateUserDTO {
   @IsNotEmpty({
     message: 'informe o id do usuário'
   })
-  id: number;
+  id: string;
   
   @IsString()
   @IsNotEmpty()
