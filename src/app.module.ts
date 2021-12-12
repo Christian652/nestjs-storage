@@ -12,9 +12,15 @@ import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
 import { OperationLogsModule } from './operationLogs/operationLogs.module';
 import { ProductController } from './product/product.controller';
+import { SettingModule } from './settings/settings.module';
+import { StorageModule } from './storages/storages.module';
 
 @Module({
-  imports: [ TypeOrmModule.forRoot(configService.getTypeOrmData()), UserModule, AuthModule, ProductModule, RolesModule, OperationLogsModule],
+  imports: [
+    TypeOrmModule.forRoot(configService.getTypeOrmData()),
+    UserModule, AuthModule, ProductModule, RolesModule, OperationLogsModule,
+    SettingModule, StorageModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

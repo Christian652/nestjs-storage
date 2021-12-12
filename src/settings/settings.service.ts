@@ -12,26 +12,26 @@ export class SettingService {
   ) { }
 
   public async getAll(): Promise<Setting[]> {
-    return await this.getAll();
+    return await this.SettingRepository.getAll();
   }
 
   public async save(
     dto: SettingDTO,
   ): Promise<Setting> {
     try {
-      return await this.SettingRepository.save(dto);
+      return await this.SettingRepository.saveSetting(dto);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  public async getOne(id: number): Promise<any> {
+  public async getOne(id: string): Promise<Setting> {
     const settings = await this.SettingRepository.findOne(id);
     if (!settings) throw new HttpException(`não foi encontrado nenhuma configuração com o id ${id}`, HttpStatus.NOT_FOUND);
     return settings;
   }
 
-  public async getByKey(key: string): Promise<any> {
+  public async getByKey(key: string): Promise<Setting> {
     const settings = await this.SettingRepository.findOne({
       where: { key }
     });
@@ -39,7 +39,7 @@ export class SettingService {
     return settings;
   }
 
-  public async delete(id: number): Promise<void> {
+  public async delete(id: string): Promise<void> {
     try {
       await this.SettingRepository.delete(id)
     } catch (error) {

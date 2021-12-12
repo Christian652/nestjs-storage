@@ -27,7 +27,6 @@ export class UserSeeder implements Seeder {
     
       return await this.userRepository.insertMany([
         {
-          id: null,
           name: 'admin user',
           email: 'admin@gmail.com',
           role: Role.Admin,
@@ -36,7 +35,6 @@ export class UserSeeder implements Seeder {
           password: adminpassword,
         },
         {
-          id: null,
           name: 'master user',
           email: 'master@gmail.com',
           role: Role.Master,

@@ -13,7 +13,8 @@ import {
   ValidationPipe,
   ParseIntPipe,
   Query,
-  Req
+  Req,
+  ParseUUIDPipe
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductDTO } from './dto/product.dto';
@@ -55,7 +56,7 @@ export class ProductController {
 
   @Get(":id")
   @Roles(Role.Admin, Role.StockerAdmin, Role.Stocker, Role.Master)
-  public async getOne(@Param("id") id: number): Promise<any> {
+  public async getOne(@Param("id", ParseUUIDPipe) id: string): Promise<any> {
     try {
       return await this.productService.getOne(id);
     } catch (error) {
@@ -66,7 +67,7 @@ export class ProductController {
   @Delete()
   @Roles(Role.Admin, Role.StockerAdmin)
   public async delete(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseUUIDPipe) id: string
   ): Promise<any> {
     try {
       return await this.productService.delete(id);

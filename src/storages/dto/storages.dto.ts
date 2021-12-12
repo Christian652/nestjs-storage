@@ -1,3 +1,6 @@
+import { User } from 'src/user/user.entity';
+import { Product } from './../../product/product.entity';
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsString, IsOptional, Length, IsInt } from 'class-validator';
 
 export class StorageDTO {

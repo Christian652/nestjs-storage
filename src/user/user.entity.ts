@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { Role } from 'src/auth/enums/role.enum';
 import { Product } from 'src/product/product.entity';
+import { Storage } from 'src/storages/storages.entity';
 
 
 @Entity({name: "users"})

@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, HttpException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
@@ -29,7 +29,7 @@ export class RolesGuard implements CanActivate {
             
             if (decodedJwt) {
                 const user = await this.userService.findById({ id: decodedJwt['id'] });
-
+                if (!user) throw new HttpException('não existe usuário', 404)
                 if (user.role === Role.Stocker)
                     if (user.id !== decodedJwt['id'])
                         return false;

@@ -13,7 +13,8 @@ import {
   ValidationPipe,
   ParseIntPipe,
   Query,
-  Req
+  Req,
+  ParseUUIDPipe
 } from '@nestjs/common';
 import { StorageService } from './storages.service';
 import { StorageDTO } from './dto/storages.dto';
@@ -55,7 +56,7 @@ export class StorageController {
 
   @Get(":id")
   @Roles(Role.Admin, Role.Master)
-  public async getOne(@Param("id") id: number): Promise<any> {
+  public async getOne(@Param("id", ParseUUIDPipe) id: string): Promise<any> {
     try {
       return await this.storagesService.getOne(id);
     } catch (error) {
@@ -66,7 +67,7 @@ export class StorageController {
   @Delete()
   @Roles(Role.Master)
   public async delete(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseUUIDPipe) id: string
   ): Promise<any> {
     try {
       return await this.storagesService.delete(id);

@@ -13,7 +13,8 @@ import {
   ValidationPipe,
   ParseIntPipe,
   Query,
-  Req
+  Req,
+  ParseUUIDPipe
 } from '@nestjs/common';
 import { SettingService } from './settings.service';
 import { SettingDTO } from './dto/settings.dto';
@@ -22,6 +23,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/auth/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator'
 import { RolesGuard } from 'src/auth/roles.guard';
+import { KeyExistsPipe } from './pipes/KeyExistsPipe.pipe';
 
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('settings')
@@ -32,7 +34,7 @@ export class SettingController {
 
   @Post()
   @Roles(Role.Admin, Role.Master)
-  @UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe, KeyExistsPipe)
   public async create(
     @Body() dto: SettingDTO,
   ): Promise<any> {
@@ -45,28 +47,28 @@ export class SettingController {
 
   @Get()
   @Roles(Role.Admin, Role.Master)
-  public async getAll(@Req() req): Promise<Setting[]> {
+  public async getAll(): Promise<Setting[]> {
     try {
-      return await this.settingsService.getSettings(req.user);
+      return await this.settingsService.getAll();
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Get(":id")
+  @Get(":key")
   @Roles(Role.Admin, Role.Master)
-  public async getOne(@Param("id") id: number): Promise<any> {
+  public async getOne(@Param("key") key: string): Promise<any> {
     try {
-      return await this.settingsService.getOne(id);
+      return await this.settingsService.getByKey(key);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @Delete()
+  @Delete(':id')
   @Roles(Role.Master)
   public async delete(
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseUUIDPipe) id: string
   ): Promise<any> {
     try {
       return await this.settingsService.delete(id);

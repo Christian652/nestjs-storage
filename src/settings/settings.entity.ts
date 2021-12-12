@@ -6,7 +6,7 @@ export class Setting extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true, update: false })
   key: string;
 
   @Column({ nullable: false })

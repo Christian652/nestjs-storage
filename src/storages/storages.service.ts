@@ -25,7 +25,7 @@ export class StorageService {
     }
   }
 
-  public async getOne(id: number): Promise<any> {
+  public async getOne(id: string): Promise<any> {
     const storages = await this.StorageRepository.findOne(id);
     if (!storages) throw new HttpException(`não foi encontrado nenhuma configuração com o id ${id}`, HttpStatus.NOT_FOUND);
     return storages;
@@ -39,7 +39,7 @@ export class StorageService {
     return storages;
   }
 
-  public async delete(id: number): Promise<void> {
+  public async delete(id: string): Promise<void> {
     try {
       await this.StorageRepository.delete(id)
     } catch (error) {

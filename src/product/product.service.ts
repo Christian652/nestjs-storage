@@ -43,7 +43,7 @@ export class ProductService {
     }
   }
 
-  public async getOne(id: number): Promise<any> {
+  public async getOne(id: string): Promise<Product> {
     const product = await this.ProductRepository.findOne(id);
     if (!product) throw new HttpException(`não foi encontrado nenhum produto com o id: ${id}`, HttpStatus.NOT_FOUND);
     return product;
@@ -57,7 +57,7 @@ export class ProductService {
     return await this.ProductRepository.getByAuthor(user);
   }
 
-  public async delete(id: number): Promise<void> {
+  public async delete(id: string): Promise<void> {
     try {
       await this.ProductRepository.delete(id)
     } catch (error) {
