@@ -23,42 +23,43 @@ import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/auth/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator'
 import { RolesGuard } from 'src/auth/roles.guard';
+import { ActiveProductPipe } from 'src/product/pipes/ActiveProductPipe.pipe';
 
 @UseGuards(AuthGuard(), RolesGuard)
 @Controller('storages')
 export class StorageController {
   constructor(
-    private storagesService: StorageService
+    private service: StorageService
   ) { }
 
   @Post()
-  @Roles(Role.Admin, Role.Master)
-  @UsePipes(ValidationPipe)
+  @Roles(Role.Admin, Role.Master, Role.Stocker, Role.StockerAdmin)
+  @UsePipes(ValidationPipe, ActiveProductPipe)
   public async create(
     @Body() dto: StorageDTO,
-  ): Promise<any> {
+  ): Promise<Storage> {
     try {
-      return await this.storagesService.save(dto);
+      return await this.service.save(dto);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get()
-  @Roles(Role.Admin, Role.Master)
-  public async getAll(): Promise<Storage[]> {
+  @Roles(Role.Admin, Role.Master, Role.Stocker, Role.StockerAdmin)
+  public async getAll(@Req() req): Promise<Storage[]> {
     try {
-      return await this.storagesService.getAll();
+      return await this.service.getAll(req.user);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get(":id")
-  @Roles(Role.Admin, Role.Master)
-  public async getOne(@Param("id", ParseUUIDPipe) id: string): Promise<any> {
+  @Roles(Role.Admin, Role.Master, Role.Stocker, Role.StockerAdmin)
+  public async getOne(@Param("id", ParseUUIDPipe) id: string): Promise<Storage> {
     try {
-      return await this.storagesService.getOne(id);
+      return await this.service.getOne(id);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -68,9 +69,9 @@ export class StorageController {
   @Roles(Role.Master)
   public async delete(
     @Param("id", ParseUUIDPipe) id: string
-  ): Promise<any> {
+  ): Promise<void> {
     try {
-      return await this.storagesService.delete(id);
+      return await this.service.softDelete(id);
     } catch (error) {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
