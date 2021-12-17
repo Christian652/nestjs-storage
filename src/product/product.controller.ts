@@ -22,7 +22,7 @@ import { Role } from 'src/auth/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator'
 import { RolesGuard } from 'src/auth/roles.guard';
 
-@UseGuards(AuthGuard(), RolesGuard)
+// @UseGuards(AuthGuard(), RolesGuard)
 @Controller('products')
 export class ProductController {
   constructor(
@@ -30,7 +30,7 @@ export class ProductController {
   ) { }
 
   @Post()
-  @Roles(Role.Admin)
+  // @Roles(Role.Admin)
   @UsePipes(ValidationPipe)
   public async create(
     @Body() productDTO: ProductDTO,
