@@ -8,7 +8,7 @@ export class settings extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 45 })
+    @Column({ length: 205 })
     key: string;
 
     @Column({ length: 45 })
